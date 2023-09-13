@@ -18,14 +18,14 @@
                             <td class="hidden sm:table-cell border-b border-slate-700 p-4 text-slate-400">{{ reference.designation }}</td>
                             <td class="hidden sm:table-cell border-b border-slate-700 p-4 pr-8 text-slate-400">{{ reference.quantite }}</td>
                             <td class="border-b border-slate-700 p-4 pr-8 text-slate-400">{{ reference.date }}</td>
-                            <td class="border-b border-slate-700 p-4 text-slate-400"><DeleteArticleModal :articleId="reference.ref"/></td>
+                            <td class="border-b border-slate-700 p-4 text-slate-400"><DeleteArticleModal :articleId="reference.id"/></td>
                         </tr>
                     </tbody>
                 </table>
                 <div v-show="showError">Problème lors de la récupération des données</div>
             </div>
         <div v-if="references.length > 0" class="flex justify-center">
-            <Pagination :nbPages="nbPages(references)" @changePage="(index) => arrayToShow = paginatedArray(references, index * 10, (index * 10) + 10)"/>
+            <Pagination :nbPages="nbPages(references)" @changePage="(index) => indexPage = index"/>
         </div>
     </div>
     <ArticleModal :open="openArticleModal" @changeOpenn="openArticleModal = false" :article="article"/>
@@ -44,8 +44,9 @@ let references = ref([]);
 let loading = ref(true);
 let showError = ref(false)
 let openArticleModal = ref(false);
+let indexPage = ref(0)
 const arrayToShow = computed(() => {
-  return paginatedArray(references.value, 0, 10)
+  return paginatedArray(references.value, indexPage.value * 10, (indexPage.value * 10) + 10);
 });
 
 onMounted(async () => {

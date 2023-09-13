@@ -32,9 +32,18 @@ export function deleteArticle(key){
 
 export async function updateArticle(key, data){
     const articleExist = await getArticle(key);
-    console.log(data)
+    const article = {};
+    const dataSplit = data.split(',');
+    dataSplit.forEach(element => {
+        const elementSplit = element.split(':');
+        if (articleExist !== false && elementSplit[0].slice(1, elementSplit[0].length - 1) === "quantite"){
+            article[elementSplit[0].slice(1, elementSplit[0].length - 1)] = parseInt(elementSplit[1].slice(1, elementSplit[1].length - 1)) + parseInt(articleExist.quantite);
+        } else {
+            article[elementSplit[0].slice(1, elementSplit[0].length - 1)] = elementSplit[1].slice(1, elementSplit[1].length - 1)
+        }
+    });
     return new Promise((resolve, reject) => {
-        const promise = update(dbRef(db, 'articles/' + key), JSON.stringify(data));
+        const promise = update(dbRef(db, 'articles/' + key), article);
         promise
             .then(() => {
                 resolve("article modifié");
@@ -50,7 +59,7 @@ export function getArticle(key){
     return new Promise((resolve, reject) => {
         get(dbRef(db, 'articles/' + key)).then((snapshot) => {
             if (snapshot.exists()) {
-                resolve(true);
+                resolve(snapshot.val());
             } else {
                 resolve(false);
             }
