@@ -2,16 +2,45 @@
 import {
   DialogClose,
   DialogContent,
-  DialogDescription,
   DialogOverlay,
   DialogPortal,
   DialogRoot,
-  DialogTitle,
-  DialogTrigger,
 } from 'radix-vue'
+import { ref, computed } from 'vue';
+import QrcodeVue from 'qrcode.vue'
 
 const props = defineProps(['open']);
-const emit = defineEmits(['close'])
+const emit = defineEmits(['close']);
+
+const reference = ref();
+const quantite = ref();
+const designation = ref();
+const datePeremption = ref();
+let dataURL = ref(null);
+const regex = /\//g;
+
+const data = computed(() => {
+    let date = datePeremption.value;
+    let dateRegex = "";
+    if(date) {
+        const dateParse = Date.parse(date);
+        date = new Date(dateParse).toLocaleDateString("fr")
+        dateRegex = date.replace(regex, '');
+    }
+    let refDate = reference.value + dateRegex;
+  return `"${refDate}":{"date":"${date}","designation":"${designation.value}","quantite":"${quantite.value}","ref":"${reference.value}"}`
+})
+
+function addArticle(){
+    dataURL.value = document.getElementById('qrcode').toDataURL("image/png");
+    const anchor = document.createElement("a");
+    anchor.href = dataURL.value;
+    anchor.download = 'qrcode.png';
+    document.body.appendChild(anchor);
+    anchor.click();
+    document.body.removeChild(anchor);
+    emit('close');
+}
 </script>
 
 <template>
@@ -21,39 +50,43 @@ const emit = defineEmits(['close'])
       <DialogContent
         class="dialog-content"
       >
+      <form @submit.prevent="addArticle">
         <fieldset class="mb-[15px] flex items-center gap-5">
           <label class="text-grass11 w-[90px] text-right text-[15px]" for="ref"> Référence </label>
           <input
+            v-model="reference"
             id="ref"
             class="text-grass11 shadow-green7 focus:shadow-green8 inline-flex h-[35px] w-full flex-1 items-center justify-center rounded-[4px] px-[10px] text-[15px] leading-none shadow-[0_0_0_1px] outline-none focus:shadow-[0_0_0_2px]"
-            defaultValue="qsd"
+            required
           >
         </fieldset>
         <fieldset class="mb-[15px] flex items-center gap-5">
           <label class="text-grass11 w-[90px] text-right text-[15px]" for="designation"> Désignation </label>
           <input
+            v-model="designation"
             id="designation"
             class="text-grass11 shadow-green7 focus:shadow-green8 inline-flex h-[35px] w-full flex-1 items-center justify-center rounded-[4px] px-[10px] text-[15px] leading-none shadow-[0_0_0_1px] outline-none focus:shadow-[0_0_0_2px]"
-            defaultValue="props.article.designation"
+            required
           >
         </fieldset>
         <fieldset class="mb-[15px] flex items-center gap-5">
           <label class="text-grass11 w-[90px] text-right text-[15px]" for="quantite"> Quantité </label>
-          <input
+          <input type="number"
+            v-model="quantite"
             id="quantite"
             class="text-grass11 shadow-green7 focus:shadow-green8 inline-flex h-[35px] w-full flex-1 items-center justify-center rounded-[4px] px-[10px] text-[15px] leading-none shadow-[0_0_0_1px] outline-none focus:shadow-[0_0_0_2px]"
-            defaultValue="props.article.quantite"
+            required
           >
         </fieldset>
         <fieldset class="mb-[15px] flex items-center gap-5">
           <label class="text-grass11 w-[90px] text-right text-[15px]" for="date"> Date de péremption </label>
-          <input
+          <!-- <input
             id="date"
             class="text-grass11 shadow-green7 focus:shadow-green8 inline-flex h-[35px] w-full flex-1 items-center justify-center rounded-[4px] px-[10px] text-[15px] leading-none shadow-[0_0_0_1px] outline-none focus:shadow-[0_0_0_2px]"
-            defaultValue="props.article.date"
-          >
+          > -->
+          <input v-model="datePeremption" type="date" id="date" class="text-grass11 shadow-green7 focus:shadow-green8 inline-flex h-[35px] w-full flex-1 items-center justify-center rounded-[4px] px-[10px] text-[15px] leading-none shadow-[0_0_0_1px] outline-none focus:shadow-[0_0_0_2px]" required />
         </fieldset>
-        <div class="mt-[25px] flex justify-end">
+        <div class="mt-[25px] flex justify-end mb-5">
           <DialogClose as-child>
             <button
               class="bg-green4 text-green11 hover:bg-green5 focus:shadow-green7 inline-flex h-[35px] items-center justify-center rounded-[4px] px-[15px] font-semibold leading-none focus:shadow-[0_0_0_2px] focus:outline-none"
@@ -61,12 +94,12 @@ const emit = defineEmits(['close'])
               Retour
             </button>
           </DialogClose>
-          <DialogClose as-child>
-            <button
-              class="text-white inline-flex h-[35px] items-center justify-center rounded-[4px] px-[15px] font-semibold leading-none outline-none focus:shadow-[0_0_0_2px] ml-2"
+          <!-- <DialogClose as-child> -->
+            <button type="submit"
+              class="bg-green-500 text-white inline-flex h-[35px] items-center justify-center rounded-[4px] px-[15px] font-semibold leading-none outline-none focus:shadow-[0_0_0_2px] ml-2"
             >Ajouter
             </button>
-          </DialogClose>
+          <!-- </DialogClose> -->
         </div>
         <DialogClose
           class="text-grass11 hover:bg-green4 focus:shadow-green7 absolute top-[4px] right-[4px] inline-flex h-[25px] w-[25px] appearance-none items-center justify-center rounded-full focus:shadow-[0_0_0_2px] focus:outline-none"
@@ -74,6 +107,10 @@ const emit = defineEmits(['close'])
         >
           X
         </DialogClose>
+        <div class="w-full">
+            <qrcode-vue :value="data" level="M" render-as="canvas" id="qrcode" class="mx-auto"/>
+        </div>
+      </form>
       </DialogContent>
     </DialogPortal>
   </DialogRoot>

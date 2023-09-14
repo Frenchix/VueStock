@@ -1,4 +1,5 @@
 import { initializeApp } from 'firebase/app'
+import { getAuth } from "firebase/auth";
 import { useDatabase } from 'vuefire'
 
 const firebaseConfig = {
@@ -13,6 +14,8 @@ const firebaseConfig = {
 
 export const firebaseApp = initializeApp(firebaseConfig)
 export const db = useDatabase();
+export const auth = getAuth(firebaseApp);
+
 // used for the databas refs
 // const db = getDatabase(app)
 // export default db

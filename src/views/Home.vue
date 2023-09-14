@@ -18,10 +18,6 @@
         <qrcode-stream @detect="onDetect" :track="paintOutline"></qrcode-stream>
         <button type="button" class="closeQrCode text-3xl" @click="openQrCode = false">X</button>
     </div>
-    <div >
-        <qrcode-vue value="value" level="M" render-as="canvas" id="qrcode"/>
-    </div>
-    <a :href="dataURL" target="_blank" download="qrcode.png">Télécharger</a>
     <div v-if="generateQrCode">
         <AddArticleModal :open="generateQrCode" @close="generateQrCode = false"/>
     </div>
@@ -32,32 +28,25 @@ import Table from '../components/Table.vue'
 import AddArticleModal from '../components/AddArticleModal.vue'
 import { QrcodeStream, QrcodeCapture } from 'vue-qrcode-reader'
 import { updateArticle } from '../models/article';
-import { ref, onMounted } from 'vue';
+import { ref } from 'vue';
 import {useToast} from 'vue-toast-notification';
-import QrcodeVue from 'qrcode.vue'
 
 const $toast = useToast();
 let openQrCode = ref(false);  
 let generateQrCode = ref(false); 
-let dataURL = ref(null);
-onMounted(() => {
-    dataURL.value = document.getElementById('qrcode').toDataURL("image/png");
-})
-
 
 async function onDetect(detectedCodes) {
-    // openQrCode.value = false;
-    // const regexKey = /"(.*?)"/;
-    // const regexData = /{(.*?)}/;
-    // const key = regexKey.exec(detectedCodes[0].rawValue);
-    // const data = regexData.exec(detectedCodes[0].rawValue);
-    // try {
-    //     await updateArticle(key[1], data[1]);
-    //     let instance = $toast.success('Article ajouté/modifié');
-    // } catch (error) {
-    //     let instance = $toast.error(error);
-    // }
-    console.log(detectedCodes);
+    openQrCode.value = false;
+    const regexKey = /"(.*?)"/;
+    const regexData = /{(.*?)}/;
+    const key = regexKey.exec(detectedCodes[0].rawValue);
+    const data = regexData.exec(detectedCodes[0].rawValue);
+    try {
+        await updateArticle(key[1], data[1]);
+        let instance = $toast.success('Article ajouté/modifié');
+    } catch (error) {
+        let instance = $toast.error(error);
+    }
 }
 function paintOutline(detectedCodes, ctx) {
       for (const detectedCode of detectedCodes) {
