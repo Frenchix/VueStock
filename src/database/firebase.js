@@ -1,5 +1,5 @@
 import { initializeApp } from 'firebase/app'
-import { getAuth } from "firebase/auth";
+import { getAuth, onAuthStateChanged } from "firebase/auth";
 import { useDatabase } from 'vuefire'
 
 const firebaseConfig = {
@@ -15,6 +15,21 @@ const firebaseConfig = {
 export const firebaseApp = initializeApp(firebaseConfig)
 export const db = useDatabase();
 export const auth = getAuth(firebaseApp);
+
+onAuthStateChanged(auth, (user) => {
+    if (user) {
+        console.log(user)
+        // this.$cookie.set('pseudo', user.displayName);
+      // User is signed in, see docs for a list of available properties
+      // https://firebase.google.com/docs/reference/js/auth.user
+      const uid = user.uid;
+      // ...
+    } else {
+        console.log("user log out")
+      // User is signed out
+      // ...
+    }
+  });
 
 // used for the databas refs
 // const db = getDatabase(app)
