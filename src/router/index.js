@@ -1,7 +1,7 @@
 import { createRouter, createWebHistory } from 'vue-router'
 import Home from '../views/Home.vue'
-import Login from '../views/Login.vue'
-import Signup from '../views/Signup.vue'
+import { useUserStore } from '@/store/user'
+import { getCurrentUser } from '../database/firebase'
 
 const router = createRouter({
   history: createWebHistory(),
@@ -14,15 +14,31 @@ const router = createRouter({
     {
         path: "/login",
         name: "Login",
-        component: Login
+        component: () => import('../views/Login.vue')
     },
     {
         path: "/signup",
         name: "Signup",
-        component: Signup
+        component: () => import('../views/Signup.vue')
     },
   ]
 });
+
+router.beforeEach(async (to, from) => {
+    const store = useUserStore();
+    const { updateUser } = store;
+    try {
+        const user = await getCurrentUser();
+        updateUser(user.displayName, user.email)
+        if (to.name === 'Login') {
+            return { name : 'Home' }
+        }
+        return true
+    } catch (error) {
+        console.log(error);
+        return { name : 'Login' }
+    }
+  })
 
 export default router
 

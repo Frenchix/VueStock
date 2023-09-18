@@ -1,6 +1,7 @@
 import { initializeApp } from 'firebase/app'
-import { getAuth, onAuthStateChanged } from "firebase/auth";
+import { getAuth } from "firebase/auth";
 import { useDatabase } from 'vuefire'
+import { onAuthStateChanged } from 'firebase/auth'
 
 const firebaseConfig = {
     apiKey: "AIzaSyD9-HuSkYeNGJa_aU0ZDrOMWVl12BX7zco",
@@ -16,21 +17,19 @@ export const firebaseApp = initializeApp(firebaseConfig)
 export const db = useDatabase();
 export const auth = getAuth(firebaseApp);
 
-onAuthStateChanged(auth, (user) => {
-    if (user) {
-        console.log(user)
-        // this.$cookie.set('pseudo', user.displayName);
-      // User is signed in, see docs for a list of available properties
-      // https://firebase.google.com/docs/reference/js/auth.user
-      const uid = user.uid;
-      // ...
-    } else {
-        console.log("user log out")
-      // User is signed out
-      // ...
-    }
-  });
 
+export function getCurrentUser() {
+    return new Promise((resolve, reject) => {
+      const unsubscribe = onAuthStateChanged(
+        auth,
+        (user) => {
+          unsubscribe()
+          resolve(user)
+        },
+        reject
+      )
+    })
+  }
 // used for the databas refs
 // const db = getDatabase(app)
 // export default db

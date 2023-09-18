@@ -1,5 +1,8 @@
 <template>
-    <h1 class="text-center text-3xl my-5">VueStock</h1>
+    <div class="w-full mx-2 flex justify-around my-5">
+        <h1 class="text-center text-3xl">VueStock</h1>
+        <DropdownMenu />
+    </div>
     <div class="w-full xl:w-2/3 xl:mx-auto mx-2 flex flex-col md:flex-row justify-around mb-2 gap-2">
         <div class="">
             <button @click="openQrCode = true" class="bg-blue-500 hover:bg-blue-400 text-white font-bold py-2 px-4 border-b-4 border-blue-700 hover:border-blue-500 rounded mr-2 mb-2">
@@ -25,6 +28,7 @@
 
 <script setup>
 import Table from '../components/Table.vue'
+import DropdownMenu from '../components/DropdownMenu.vue'
 import AddArticleModal from '../components/AddArticleModal.vue'
 import { QrcodeStream, QrcodeCapture } from 'vue-qrcode-reader'
 import { updateArticle } from '../models/article';

@@ -1,4 +1,4 @@
-import { createUserWithEmailAndPassword, updateProfile, deleteUser  } from "firebase/auth";
+import { createUserWithEmailAndPassword, updateProfile, deleteUser, signOut  } from "firebase/auth";
 import { auth } from '../database/firebase'
 
 export function createUser(email, password, pseudo) {
@@ -25,4 +25,16 @@ export function createUser(email, password, pseudo) {
                 reject(error);
             });
      });
+}
+
+export function logout(){
+    return new Promise((resolve, reject) => {
+        signOut(auth).then(() => {
+            // Sign-out successful.
+            resolve();
+        }).catch((error) => {
+            // An error happened.
+            reject();
+        });
+    });
 }
