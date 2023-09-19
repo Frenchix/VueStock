@@ -92,7 +92,9 @@
 <script setup>
 import { createUser } from '../models/user'
 import { ref } from 'vue'
+import { useRouter } from 'vue-router'
 
+const router = useRouter()
 const email = ref()
 const password = ref()
 const pseudo = ref()
@@ -101,6 +103,7 @@ const showError = ref(false)
 async function signup() {
     try {
         await createUser(email.value, password.value, pseudo.value);
+        router.replace('/');
     } catch (error) {
         showError.value = true
     }

@@ -21,6 +21,16 @@ const router = createRouter({
         name: "Signup",
         component: () => import('../views/Signup.vue')
     },
+    {
+        path: "/profil",
+        name: "Profil",
+        component: () => import('../views/Profil.vue')
+    },
+    {
+        path: "/resetPassword",
+        name: "ResetPassword",
+        component: () => import('../views/ResetPassword.vue')
+    },
   ]
 });
 
@@ -29,9 +39,15 @@ router.beforeEach(async (to, from) => {
     const { updateUser } = store;
     try {
         const user = await getCurrentUser();
-        updateUser(user.displayName, user.email)
-        if (to.name === 'Login') {
-            return { name : 'Home' }
+        if (!user) {
+            if (to.name !== 'Login' && to.name !== 'Signup' && to.name !== 'ResetPassword'){
+                throw new Error("Besoin de s'identifier");
+            }
+        } else {
+            if (to.name === 'Login' || to.name === 'Signup' || to.name === 'ResetPassword') {
+                return { name : 'Home' }
+            }
+            updateUser(user.displayName, user.email, user.emailVerified)
         }
         return true
     } catch (error) {

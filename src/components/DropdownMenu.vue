@@ -24,42 +24,15 @@
         <!-- Dropdown menu -->
         <div
           v-show="show"
-          class="
-            absolute
-            right-0
-            py-2
-            mt-2
-            bg-indigo-500
-            rounded-md
-            shadow-xl
-            w-44
-            z-10
-          "
-        >
+          class="absolute right-0 py-2 mt-2 bg-indigo-500 rounded-md shadow-xl w-44 z-10">
           <router-link
-            to="/"
-            class="
-              block
-              px-4
-              py-2
-              text-sm text-indigo-100
-              hover:bg-indigo-400 hover:text-indigo-100
-            "
-          >
+            to="/profil"
+            class="block px-4 py-2 text-sm text-indigo-100 hover:bg-indigo-400 hover:text-indigo-100">
             Mon profil
           </router-link>
-          <router-link
-            to="/"
-            class="
-              block
-              px-4
-              py-2
-              text-sm text-indigo-100
-              hover:bg-indigo-400 hover:text-indigo-100
-            "
-          >
+          <button @click="clickLogout()" class="w-full text-left px-4 py-2 text-sm text-indigo-100 hover:bg-indigo-400 hover:text-indigo-100">
             Se déconnecter
-          </router-link>
+        </button>
         </div>
       </div>
     </div>
@@ -69,8 +42,24 @@
 import { ref } from 'vue'
 import { useUserStore } from '@/store/user'
 import { storeToRefs } from 'pinia'
+import { logoutUser } from '../models/user'
+import { useToast } from 'vue-toast-notification'
+import { useRouter } from 'vue-router'
+
+const router = useRouter()
+const $toast = useToast();
 
 const store = useUserStore();
-const { userName, userMail } = storeToRefs(store);
+const { userName } = storeToRefs(store);
 let show = ref(false);
+
+async function clickLogout(){
+    try {
+       await logoutUser();   
+       let instance = $toast.success('Vous êtes bien déconnecté');
+       router.replace('Login')
+    } catch (error) {
+        let instance = $toast.error("Un problème est survenu lors de la déconnexion!");
+    }
+}
 </script>

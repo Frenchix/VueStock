@@ -1,5 +1,5 @@
 <template>
-    <div class="w-full mx-2 flex justify-around my-5">
+    <div class="w-full flex justify-around my-5">
         <h1 class="text-center text-3xl">VueStock</h1>
         <DropdownMenu />
     </div>

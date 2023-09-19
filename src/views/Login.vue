@@ -56,10 +56,12 @@
                           for="grid-password"
                           >Email</label
                         ><input
+                          v-model="email"
                           type="email"
                           class="border-0 px-3 py-3 placeholder-gray-400 text-gray-700 bg-white rounded text-sm shadow focus:outline-none focus:ring w-full"
                           placeholder="Email"
                           style="transition: all 0.15s ease 0s;"
+                          required
                         />
                       </div>
                       <div class="relative w-full mb-3">
@@ -68,14 +70,16 @@
                           for="grid-password"
                           >Mot de passe</label
                         ><input
+                        v-model="password"
                           type="password"
                           class="border-0 px-3 py-3 placeholder-gray-400 text-gray-700 bg-white rounded text-sm shadow focus:outline-none focus:ring w-full"
                           placeholder="Mot de passe"
                           style="transition: all 0.15s ease 0s;"
+                          required
                         />
                       </div>
                       <div class="text-center mt-6">
-                        <button
+                        <button @click="signin()"
                           class="bg-gray-900 text-white active:bg-gray-700 text-sm font-bold uppercase px-6 py-3 rounded shadow hover:shadow-lg outline-none focus:outline-none mr-1 mb-1 w-full"
                           type="button"
                           style="transition: all 0.15s ease 0s;"
@@ -83,16 +87,19 @@
                           Se connecter
                         </button>
                       </div>
+                      <div v-if="showError" class="text-red-500">
+                          Une erreur est survenue!  
+                      </div>
                     </form>
                   </div>
                   <div class="flex justify-around mb-3">
                     <div>
-                        <a href="#pablo" class="text-gray-700"
+                        <a href="/resetPassword" class="text-gray-700"
                         ><small>Mot de passe oublié?</small></a
                         >
                     </div>
                     <div>
-                        <a href="#pablo" class="text-gray-700"
+                        <a href="/signup" class="text-gray-700"
                         ><small> Créer un compte</small></a
                         >
                     </div>
@@ -105,3 +112,24 @@
       </main>
     </div>
   </template>
+
+<script setup>
+import { signIn } from '../models/user';
+import { ref } from 'vue';
+import { useRouter } from 'vue-router'
+
+const router = useRouter()
+
+const email = ref()
+const password = ref()
+const showError = ref(false)
+async function signin() {
+    try {
+        await signIn(email.value, password.value)
+        router.replace('/');
+    } catch (error) {
+        showError.value = true;
+    }
+}
+
+</script>
