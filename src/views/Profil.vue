@@ -39,7 +39,7 @@
                             required
                             />
                       </div>
-                      <div class="text-center mt-6">
+                      <div v-if="provider !== 'google.com'" class="text-center mt-6">
                         <button
                           class="bg-gray-900 text-white active:bg-gray-700 text-sm font-bold uppercase px-6 py-3 rounded shadow hover:shadow-lg outline-none focus:outline-none mr-1 mb-1 w-full"
                           type="submit"
@@ -65,11 +65,11 @@
                         />
                       </div>
                       <div v-if="emailVerified" class="mt-6">
-                        <label
+                        <label v-if="provider !== 'google.com'"
                           class="block uppercase text-gray-700 text-xs font-bold mb-2"
                           for="grid-password"
                           >Rentre ton mot de passe</label
-                        ><input
+                        ><input v-if="provider !== 'google.com'"
                           type="password"
                           v-model="passwordMail"
                           class="border-0 px-3 py-3 placeholder-gray-400 text-gray-700 bg-white rounded text-sm shadow focus:outline-none focus:ring w-full mb-6"
@@ -77,7 +77,7 @@
                           style="transition: all 0.15s ease 0s;"
                           required
                         />
-                        <button
+                        <button v-if="provider !== 'google.com'"
                           class="bg-gray-900 text-white active:bg-gray-700 text-sm font-bold uppercase px-6 py-3 rounded shadow hover:shadow-lg outline-none focus:outline-none mr-1 mb-6 w-full"
                           type="submit"
                           style="transition: all 0.15s ease 0s;"
@@ -92,7 +92,7 @@
                         </button>
                       </div>
                     </form>
-                    <form @submit.prevent="changePassword()">
+                    <form v-if="provider !== 'google.com'" @submit.prevent="changePassword()">
                       <div class="relative w-full mb-3">
                         <label
                           class="block uppercase text-gray-700 text-xs font-bold mb-2"
@@ -153,7 +153,7 @@ import { useRouter } from 'vue-router'
 const router = useRouter()
 const store = useUserStore();
 const $toast = useToast();
-const { userName, userMail, emailVerified } = storeToRefs(store);
+const { userName, userMail, emailVerified, provider } = storeToRefs(store);
 const password = ref();
 const passwordMail = ref();
 const newPassword = ref();

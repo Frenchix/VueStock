@@ -1,6 +1,7 @@
 <template>
     <div v-show="loading" class="text-slate-800 w-full xl:w-2/3 mx-auto text-center">Loading ...</div>
     <div v-show="!loading" class="relative bg-slate-500 rounded-xl overflow-hidden mx-2 xl:mx-auto xl:w-2/3">
+        <input v-model="searchRef" type="text" placeholder="Tape une référence">
             <div class="shadow-sm overflow-hidden my-8">
                 <table class="border-collapse table-auto w-full text-sm">
                     <thead>
@@ -17,7 +18,7 @@
                             <td class="border-b border-slate-700 p-4 pl-8 text-slate-400">{{ reference.ref }}</td>
                             <td class="hidden sm:table-cell border-b border-slate-700 p-4 text-slate-400">{{ reference.designation }}</td>
                             <td class="hidden sm:table-cell border-b border-slate-700 p-4 pr-8 text-slate-400">{{ reference.quantite }}</td>
-                            <td class="border-b border-slate-700 p-4 pr-8 text-slate-400">{{ reference.date }}</td>
+                            <td class="border-b border-slate-700 p-4 pr-8 text-slate-400">{{ new Date(parseInt(reference.date, 10)).getDate() + '/' + (new Date(parseInt(reference.date, 10)).getMonth() + 1) + '/' + new Date(parseInt(reference.date, 10)).getFullYear() }}</td>
                             <td class="border-b border-slate-700 p-4 text-slate-400"><DeleteArticleModal :articleId="reference.id"/></td>
                         </tr>
                     </tbody>
@@ -45,8 +46,18 @@ let loading = ref(true);
 let showError = ref(false)
 let openArticleModal = ref(false);
 let indexPage = ref(0)
+const searchRef = ref(); 
+
 const arrayToShow = computed(() => {
-  return paginatedArray(references.value, indexPage.value * 10, (indexPage.value * 10) + 10);
+    if (searchRef.value){
+        return references.value.filter(element => {
+            if (element.ref.toLowerCase().includes(searchRef.value.toLowerCase())) {
+                return element;
+            }
+        })
+    } else {
+        return paginatedArray(references.value, indexPage.value * 10, (indexPage.value * 10) + 10);
+    }
 });
 
 onMounted(async () => {

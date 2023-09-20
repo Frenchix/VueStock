@@ -19,7 +19,7 @@
                       </h6>
                     </div>
                     <div class="btn-wrapper text-center">
-                      <button
+                      <button @click="signInGoogle()"
                         class="bg-white active:bg-gray-100 text-gray-800 px-4 py-2 rounded outline-none focus:outline-none mr-1 mb-1 uppercase shadow hover:shadow-md inline-flex items-center font-bold text-xs"
                         type="button"
                         style="transition: all 0.15s ease 0s;"
@@ -114,7 +114,7 @@
   </template>
 
 <script setup>
-import { signIn } from '../models/user';
+import { signIn, signInWithGoogle } from '../models/user';
 import { ref } from 'vue';
 import { useRouter } from 'vue-router'
 
@@ -126,6 +126,15 @@ const showError = ref(false)
 async function signin() {
     try {
         await signIn(email.value, password.value)
+        router.replace('/');
+    } catch (error) {
+        showError.value = true;
+    }
+}
+
+async function signInGoogle(){
+    try {
+        await signInWithGoogle()
         router.replace('/');
     } catch (error) {
         showError.value = true;

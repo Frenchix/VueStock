@@ -47,7 +47,7 @@ router.beforeEach(async (to, from) => {
             if (to.name === 'Login' || to.name === 'Signup' || to.name === 'ResetPassword') {
                 return { name : 'Home' }
             }
-            updateUser(user.displayName, user.email, user.emailVerified)
+            updateUser(user.displayName, user.email, user.emailVerified, user.providerData[0].providerId, user.uid)
         }
         return true
     } catch (error) {

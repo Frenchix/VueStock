@@ -17,17 +17,19 @@ const quantite = ref();
 const designation = ref();
 const datePeremption = ref();
 let dataURL = ref(null);
-const regex = /\//g;
+// const regex = /\//g;
 
 const data = computed(() => {
     let date = datePeremption.value;
-    let dateRegex = "";
+    // let dateRegex = "";
     if(date) {
-        const dateParse = Date.parse(date);
-        date = new Date(dateParse).toLocaleDateString("fr")
-        dateRegex = date.replace(regex, '');
+        // console.log(new Date(date).getTime());
+        // const dateParse = Date.parse(date);
+        // date = new Date(dateParse).toLocaleDateString("fr");
+        // dateRegex = date.replace(regex, '');
+        date = new Date(date).getTime();
     }
-    let refDate = reference.value + dateRegex;
+    let refDate = reference.value + date;
   return `"${refDate}":{"date":"${date}","designation":"${designation.value}","quantite":"${quantite.value}","ref":"${reference.value}"}`
 })
 

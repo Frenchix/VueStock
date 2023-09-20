@@ -63,7 +63,7 @@ const emit = defineEmits(['changeOpenn'])
           <input
             id="date"
             class="text-grass11 shadow-green7 focus:shadow-green8 inline-flex h-[35px] w-full flex-1 items-center justify-center rounded-[4px] px-[10px] text-[15px] leading-none shadow-[0_0_0_1px] outline-none focus:shadow-[0_0_0_2px]"
-            :defaultValue="props.article.date"
+            :defaultValue="new Date(parseInt(props.article.date, 10)).getDate() + '/' + (new Date(parseInt(props.article.date, 10)).getMonth() + 1) + '/' + new Date(parseInt(props.article.date, 10)).getFullYear()"
           >
         </fieldset>
         <div class="mt-[25px] flex justify-end">

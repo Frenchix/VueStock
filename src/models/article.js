@@ -1,13 +1,16 @@
 import { useDatabaseList } from 'vuefire'
-import { ref as dbRef, remove, update, set, get } from 'firebase/database'
+import { ref as dbRef, remove, update, set, get, orderByValue, orderByChild } from 'firebase/database'
 import { db } from '../database/firebase'
+import { useUserStore } from '@/store/user'
 
 export function getArticles() {
+    const store = useUserStore();
+    const { uid } = store;
     return new Promise((resolve, reject) => {
-        const { data: dataReferences, pending, error, promise } = useDatabaseList(dbRef(db, "articles"));
+        const { data: dataReferences, pending, error, promise } = useDatabaseList(dbRef(db, `${uid}/articles`));
         promise.value
             .then(() => {
-                resolve(dataReferences.value);
+                resolve(dataReferences.value.sort((a,b) => { return new Date(a.date) - new Date(b.date) }));
             })
             .catch((err) => {
                 console.error("Une erreur s'est produite lors du chargement des données :", err);
@@ -17,8 +20,10 @@ export function getArticles() {
 }
 
 export function deleteArticle(key){
+    const store = useUserStore();
+    const { uid } = store;
     return new Promise((resolve, reject) => {
-        const promise = remove(dbRef(db, `articles/${key}`));
+        const promise = remove(dbRef(db, `${uid}/articles/${key}`));
         promise
             .then(() => {
                 resolve("article supprimé");
@@ -31,6 +36,8 @@ export function deleteArticle(key){
 }
 
 export async function updateArticle(key, data){
+    const store = useUserStore();
+    const { uid } = store;
     const articleExist = await getArticle(key);
     const article = {};
     const dataSplit = data.split(',');
@@ -43,7 +50,9 @@ export async function updateArticle(key, data){
         }
     });
     return new Promise((resolve, reject) => {
-        const promise = update(dbRef(db, 'articles/' + key), article);
+        const store = useUserStore();
+        const { uid } = store;
+        const promise = update(dbRef(db, `${uid}/articles/` + key), article);
         promise
             .then(() => {
                 resolve("article modifié");
@@ -56,8 +65,10 @@ export async function updateArticle(key, data){
 }
 
 export function getArticle(key){
+    const store = useUserStore();
+    const { uid } = store;
     return new Promise((resolve, reject) => {
-        get(dbRef(db, 'articles/' + key)).then((snapshot) => {
+        get(dbRef(db, `${uid}/articles/` + key)).then((snapshot) => {
             if (snapshot.exists()) {
                 resolve(snapshot.val());
             } else {

@@ -37,7 +37,7 @@ import {useToast} from 'vue-toast-notification';
 
 const $toast = useToast();
 let openQrCode = ref(false);  
-let generateQrCode = ref(false); 
+let generateQrCode = ref(false);
 
 async function onDetect(detectedCodes) {
     openQrCode.value = false;
