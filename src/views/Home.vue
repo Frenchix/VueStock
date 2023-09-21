@@ -8,12 +8,12 @@
             <button @click="openQrCode = true" class="bg-blue-500 hover:bg-blue-400 text-white font-bold py-2 px-4 border-b-4 border-blue-700 hover:border-blue-500 rounded mr-2 mb-2">
                 Scanner QR Code
             </button>
-            <div class="parent-div">
+            <div v-if="!isMobile()" class="parent-div">
                 <button class="btn-upload">Selectionner un fichier QR Code</button>
                 <qrcode-capture @detect="onDetect"/>
             </div>
         </div>
-        <div class="">
+        <div v-if="!isMobile()" class="">
             <button @click="generateQrCode = true" class="bg-green-500 hover:bg-green-400 text-white font-bold py-2 px-4 border-b-4 border-green-700 hover:border-green-500 rounded mr-2">
                 Generer QR Code
             </button>
@@ -71,7 +71,13 @@ function paintOutline(detectedCodes, ctx) {
         ctx.stroke()
       }
     }
-
+function isMobile() {
+   if(/Android|webOS|iPhone|iPad|iPod|BlackBerry|IEMobile|Opera Mini/i.test(navigator.userAgent)) {
+     return true
+   } else {
+     return false
+   }
+ }
 </script>
 
 <style>
