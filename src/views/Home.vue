@@ -3,12 +3,15 @@
         <h1 class="text-center text-3xl">VueStock</h1>
         <DropdownMenu />
     </div>
-    <div class="w-full xl:w-2/3 xl:mx-auto mx-2 flex flex-col md:flex-row justify-around mb-2 gap-2">
-        <div class="">
+    <div class="w-full xl:w-2/3 xl:mx-auto mx-2 flex flex-col md:flex-row justify-around my-10 gap-2 items-center">
+        <div class="flex items-center flex-col md:flex-row">
             <button @click="openQrCode = true" class="bg-blue-500 hover:bg-blue-400 text-white font-bold py-2 px-4 border-b-4 border-blue-700 hover:border-blue-500 rounded mr-2 mb-2">
                 Scanner QR Code
             </button>
-            <qrcode-capture @detect="onDetect"/>
+            <div class="parent-div">
+                <button class="btn-upload">Selectionner un fichier QR Code</button>
+                <qrcode-capture @detect="onDetect"/>
+            </div>
         </div>
         <div class="">
             <button @click="generateQrCode = true" class="bg-green-500 hover:bg-green-400 text-white font-bold py-2 px-4 border-b-4 border-green-700 hover:border-green-500 rounded mr-2">
@@ -72,6 +75,30 @@ function paintOutline(detectedCodes, ctx) {
 </script>
 
 <style>
+.parent-div {
+    height: 100%;
+  display: inline-block;
+  position: relative;
+  overflow: hidden;
+}
+
+.parent-div input[type=file] {
+  left: 0;
+  top: 0;
+  opacity: 0;
+  position: absolute;
+  font-size: 20px;
+}
+
+.btn-upload {
+  background-color: #fff;
+  border: 1px solid #000;
+  color: #000;
+  padding: 8px 25px;
+  border-radius: 10px;
+  font-size: 12px;
+}
+
 .qrcode {
     position: fixed;
     top: 0;
