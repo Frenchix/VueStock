@@ -75,7 +75,7 @@
                   </div>
                   <div class="flex justify-around mb-3">
                     <div>
-                        <a href="#pablo" class="text-gray-700"
+                        <a href="/login" class="text-gray-700"
                         ><small>Déja un compte? Se connecter</small></a
                         >
                     </div>

@@ -10,7 +10,7 @@ export function getArticles() {
         const { data: dataReferences, pending, error, promise } = useDatabaseList(dbRef(db, `${uid}/articles`));
         promise.value
             .then(() => {
-                resolve(dataReferences.value.sort((a,b) => { return new Date(a.date) - new Date(b.date) }));
+                resolve(dataReferences.value.sort((a,b) => { return new Date(parseInt(a.date, 10)) - new Date(parseInt(b.date, 10)) }));
             })
             .catch((err) => {
                 console.error("Une erreur s'est produite lors du chargement des données :", err);
