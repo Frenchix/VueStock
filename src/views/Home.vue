@@ -73,8 +73,10 @@ function paintOutline(detectedCodes, ctx) {
     }
 function isMobile() {
    if(/Android|webOS|iPhone|iPad|iPod|BlackBerry|IEMobile|Opera Mini/i.test(navigator.userAgent)) {
+    console.log("mobile");
      return true
    } else {
+    console.log("desktop");
      return false
    }
  }

@@ -4,13 +4,13 @@ import { useDatabase } from 'vuefire'
 import { onAuthStateChanged } from 'firebase/auth'
 
 const firebaseConfig = {
-    apiKey: "AIzaSyD9-HuSkYeNGJa_aU0ZDrOMWVl12BX7zco",
-    authDomain: "vuestock-8db09.firebaseapp.com",
-    projectId: "vuestock-8db09",
-    storageBucket: "vuestock-8db09.appspot.com",
-    messagingSenderId: "94688918004",
-    appId: "1:94688918004:web:1d8b48ca63e1e5c1e9a1a1",
-    databaseURL: "https://vuestock-8db09-default-rtdb.europe-west1.firebasedatabase.app"
+    apiKey: import.meta.env.VITE_FIREBASE_API_KEY,
+    authDomain: import.meta.env.VITE_FIREBASE_DOMAIN,
+    projectId: import.meta.env.VITE_FIREBASE_PROJECT_ID,
+    storageBucket: import.meta.env.VITE__FIREBASE_STORAGE_BUCKET,
+    messagingSenderId: import.meta.env.VITE_FIREBASE_MESSAGING_SENDER_ID,
+    appId: import.meta.env.VITE_ID,
+    databaseURL: import.meta.env.VITE_FIREBASE_DB_URL
   };
 
 export const firebaseApp = initializeApp(firebaseConfig)
