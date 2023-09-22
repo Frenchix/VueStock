@@ -1,6 +1,8 @@
 # VueStock
 
-This template should help get you started developing with Vue 3 in Vite.
+Dans très peu de temps les codes barres vont être remplacés par des QR Codes ce qui permettra d'avoir dans le QR Code la date de péremption par exemple. Ce site web permet de gérer son stock grâce à ses QR Codes. Il est possible de générer un QR Code ainsi que d'en scanner un. Scanner un QR Code permet d'ajouter ou mettre à jour la stock de l'article. Une barre de recherche permet de rechercher un article et il est égalemebt possible de voir tous nos articles qui sont ou vont être périmé grâce au filtre date.
+
+Stack technique utilité : VueJS 3, pinia et Firebase pour l'authentification et la BDD
 
 ## Recommended IDE Setup
 
